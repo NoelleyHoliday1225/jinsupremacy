@@ -1,1 +1,126 @@
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#000000">
+  <title>Mi peluche</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: #000;
+      overflow: hidden;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .escena {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #personaje {
+      display: block;
+      width: min(350px, 80vw);
+      max-height: 80vh;
+      object-fit: contain;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-drag: none;
+      -webkit-tap-highlight-color: transparent;
+      transform-origin: center bottom;
+      animation: flotar 3s ease-in-out infinite;
+    }
+
+    #personaje.apretar {
+      animation: gelatina 650ms ease-in-out;
+    }
+
+    @keyframes flotar {
+      0%, 100% {
+        transform: translateY(0) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-8px) rotate(1deg);
+      }
+    }
+
+    @keyframes gelatina {
+      0%   { transform: scale(1, 1); }
+      15%  { transform: scale(1.2, .7) rotate(-5deg); }
+      30%  { transform: scale(.8, 1.25) rotate(5deg); }
+      45%  { transform: scale(1.15, .85) rotate(-4deg); }
+      60%  { transform: scale(.92, 1.1) rotate(3deg); }
+      75%  { transform: scale(1.05, .96) rotate(-1deg); }
+      100% { transform: scale(1, 1) rotate(0deg); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #personaje {
+        animation: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="escena">
+
+    <!-- CAMBIA EL NOMBRE POR EL DE TU IMAGEN -->
+    <img
+      id="personaje"
+      src="./mi-imagen.png"
+      alt="Mi personaje"
+      draggable="false"
+    >
+
+    <!-- TU ARCHIVO DE SONIDO -->
+    <audio id="sonido" preload="auto">
+      <source src="./mi-sonido.mp3" type="audio/mpeg">
+    </audio>
+
+  </main>
+
+  <script>
+    const personaje = document.getElementById("personaje");
+    const sonido = document.getElementById("sonido");
+
+    personaje.addEventListener("click", async () => {
+      // Reiniciar la animación
+      personaje.classList.remove("apretar");
+      void personaje.offsetWidth;
+      personaje.classList.add("apretar");
+
+      // Reproducir el sonido desde el inicio
+      sonido.pause();
+      sonido.currentTime = 0;
+
+      try {
+        await sonido.play();
+      } catch (error) {
+        console.error("No se pudo reproducir el audio:", error);
+      }
+    });
+
+    personaje.addEventListener("animationend", () => {
+      personaje.classList.remove("apretar");
+    });
+  </script>
+</body>
+</html>
