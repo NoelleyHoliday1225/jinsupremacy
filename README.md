@@ -1,2 +1,0 @@
-# jinsupremacy
-Just jin supremacy
